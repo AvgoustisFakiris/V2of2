@@ -1,4 +1,4 @@
-# V2of2 ![alt text](https://raw.githubusercontent.com/AvgoustisFakiris/V2of2/branch/\app\src\main\res\mipmap-hdpi\ic_launcher.png)
+# V2of2 ![alt text](https://imgur.com/a/jcUms64)
 Το παρών Project αποτελέι  διπλωματική εργασία του Αυγουστή Φακίρη του τμήματος Πληροφορικής και Τηλεματικής του Χαροκοπείου Πανεπιστημίου,
 με επιβλέποντα καθηγητή τον κ. Βασίλη Δαλάκα. 2018/19
 
