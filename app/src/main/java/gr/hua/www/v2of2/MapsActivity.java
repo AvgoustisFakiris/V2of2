@@ -40,6 +40,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+import static gr.hua.www.v2of2.MapView.mapv;
 
 
 public class MapsActivity extends BaseActivity implements
@@ -148,7 +149,16 @@ public class MapsActivity extends BaseActivity implements
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
         map = googleMap;
-        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        //Check Map type
+        if (mapv == "t") {
+            map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        } else if (mapv == "n") {
+            map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        } else if (mapv == "s") {
+            map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        } else {
+            map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             map.getUiSettings().setAllGesturesEnabled(true);

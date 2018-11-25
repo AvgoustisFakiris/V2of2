@@ -82,13 +82,15 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <service
-            android:name=".MyFirebaseMessagingService">
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGINGEVENT"/>
+                <action android:name="com.google.firebase.MESSAGINGEVENT" />
             </intent-filter>
         </service>
-        <activity android:name=".DebugActivity"></activity>
+
+        <activity android:name=".DebugActivity" />
+        <activity android:name=".MapView"></activity>
     </application>
 
 </manifest>

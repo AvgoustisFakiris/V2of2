@@ -30,5 +30,11 @@
         android:icon="@drawable/nodebug"
         android:title="Disable Debugging"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_map_view"
+        android:icon="@drawable/map"
+        android:orderInCategory="10"
+        android:title="Map View"
+        app:showAsAction="never" />
 
 </menu>

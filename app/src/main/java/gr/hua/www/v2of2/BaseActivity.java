@@ -408,6 +408,11 @@ public class BaseActivity extends AppCompatActivity implements
                 VersionHelper.refreshActionBarMenu(this);
                 dbg = false;
                 return true;
+            case R.id.menu_map_view:
+                VersionHelper.refreshActionBarMenu(this);
+                Intent intent = new Intent(getApplicationContext(), MapView.class);
+                startActivity(intent);
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
