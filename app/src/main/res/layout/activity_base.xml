@@ -17,36 +17,20 @@
         android:layout_centerHorizontal="true">
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Settings"
-            android:id="@+id/settings"
-            android:layout_marginBottom="10dp"
-            android:onClick="btnSettings" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:id="@+id/login"
-            android:layout_marginBottom="10dp"
-            android:onClick="btnLogin" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start"
             android:id="@+id/start"
-            android:layout_marginBottom="10dp"
-            android:onClick="btnStart" />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exit"
-            android:id="@+id/exit"
             android:layout_marginBottom="10dp"
-            android:onClick="btnExit" />
+            android:onClick="btnStart"
+            android:text="Start" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:onClick="btnLogin"
+            android:text="Login" />
 
     </LinearLayout>
 

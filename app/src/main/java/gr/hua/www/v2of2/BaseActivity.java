@@ -29,6 +29,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -50,6 +52,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.apache.http.client.methods.HttpPost;
 
+import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.URI;
 import java.text.DateFormat;
@@ -275,15 +278,15 @@ public class BaseActivity extends AppCompatActivity implements
     }
 
     public void setOperatorName(String operatorname) {
-        this.operatorName = operatorname;
+        operatorName = operatorname;
     }
 
     public void setMCC(String mcc) {
-        this.mcc = mcc;
+        BaseActivity.mcc = mcc;
     }
 
     public void setMNC(String mnc) {
-        this.mnc = mnc;
+        BaseActivity.mnc = mnc;
     }
 
     @Override
@@ -339,6 +342,52 @@ public class BaseActivity extends AppCompatActivity implements
         }
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //Show Icons in Overflow Menu
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
+                    Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for overflow menu", e);
+                }
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_settings:
+                btnSettings(v);
+                return true;
+            case R.id.menu_exit:
+                finish();
+                System.exit(0);
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -842,7 +891,7 @@ public class BaseActivity extends AppCompatActivity implements
     * For example,the IMEI for GSM and the MEID or ESN for CDMA phones.
     */
         deviceID = mTelephonyManager.getDeviceId();
-        if (deviceID.equals(null)) {
+        if (deviceID  == null) {
             deviceID = "0000000000000000";
         }
     /*
@@ -850,7 +899,7 @@ public class BaseActivity extends AppCompatActivity implements
     * For example, the IMSI for a GSM phone.
     */
         subscriberID = mTelephonyManager.getSubscriberId();
-        if (subscriberID.equals(null)) {
+        if (subscriberID == null) {
             subscriberID = "0000000000000000";
         }
     /*
@@ -866,30 +915,34 @@ public class BaseActivity extends AppCompatActivity implements
             androidID = "0000000000000000";
         }
 
-        deviceSerial = (String) Build.SERIAL;
+        deviceSerial = Build.SERIAL;
         if (deviceSerial.equals(null)) {
             deviceSerial = "0000000000000000";
         }
 
-        U2ID = install.id(this);
+        U2ID = Installation.id(this);
 
         model = Build.MODEL;
         brand = Build.BRAND;
         product = Build.PRODUCT;
 
-        os = Build.VERSION.BASE_OS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            os = Build.VERSION.BASE_OS;
+        }
         osId = Build.VERSION.RELEASE;
 
-        setMCC(this.mTelephonyManager.getNetworkOperator().substring(0, 3));
-        setMNC(this.mTelephonyManager.getNetworkOperator().substring(3));
-        setOperatorName(this.mTelephonyManager.getNetworkOperatorName());
+        setMCC(mTelephonyManager.getNetworkOperator().substring(0, 3));
+        setMNC(mTelephonyManager.getNetworkOperator().substring(3));
+        setOperatorName(mTelephonyManager.getNetworkOperatorName());
 
         Log.i(TAG, brand);
         Log.i(TAG, model);
         Log.i(TAG, product);
         Log.i(TAG, Build.ID);
         Log.i(TAG, operatorName);
-        Log.i(TAG, Build.VERSION.BASE_OS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.i(TAG, Build.VERSION.BASE_OS);
+        }
         Log.i(TAG, Build.VERSION.RELEASE);
         Log.i(TAG, "UUID : " + U2ID);
         Log.i(TAG, "Android ID : " + androidID);
