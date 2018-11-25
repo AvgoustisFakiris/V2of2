@@ -16,4 +16,19 @@
         android:icon="@drawable/exit"
         android:title="Exit"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_debug"
+        android:orderInCategory="850"
+        android:icon="@drawable/debug"
+        android:title="Enable Debugging"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_debug_off"
+        android:orderInCategory="850"
+        android:icon="@drawable/nodebug"
+        android:title="Disable Debugging"
+        app:showAsAction="never"/>
+
 </menu>

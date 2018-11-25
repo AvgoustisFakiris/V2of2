@@ -68,6 +68,7 @@ import gr.hua.www.v2of2.utils.CustomPhoneStateListener;
 import gr.hua.www.v2of2.utils.Installation;
 import gr.hua.www.v2of2.utils.RestTask;
 import gr.hua.www.v2of2.utils.StickyService;
+import gr.hua.www.v2of2.utils.VersionHelper;
 import okhttp3.MediaType;
 
 
@@ -143,6 +144,8 @@ public class BaseActivity extends AppCompatActivity implements
     protected String user;
     protected String pass;
     protected String uri;
+
+    public static boolean dbg=false; //debugging choice
 
     public static void setSNR(int snr) {
         BaseActivity.snr = snr;
@@ -353,6 +356,10 @@ public class BaseActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        //Debug Buttons Show
+        MenuItem menuItemDebugOn = menu.findItem(R.id.menu_debug);
+        MenuItem menuItemDebugOff = menu.findItem(R.id.menu_debug_off);
+
         //Show Icons in Overflow Menu
         if (menu != null) {
             if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
@@ -365,6 +372,14 @@ public class BaseActivity extends AppCompatActivity implements
                     Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for overflow menu", e);
                 }
             }
+        }
+        //Showing only one button at a time
+        if (dbg) {
+            menuItemDebugOn.setEnabled(false).setVisible(false);
+            menuItemDebugOff.setEnabled(true).setVisible(true);
+        } else {
+            menuItemDebugOn.setEnabled(true).setVisible(true);
+            menuItemDebugOff.setEnabled(false).setVisible(false);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -385,6 +400,14 @@ public class BaseActivity extends AppCompatActivity implements
             case R.id.menu_exit:
                 finish();
                 System.exit(0);
+            case R.id.menu_debug:
+                VersionHelper.refreshActionBarMenu(this);
+                dbg = true;
+                return true;
+            case R.id.menu_debug_off:
+                VersionHelper.refreshActionBarMenu(this);
+                dbg = false;
+                return true;
 
         }
         return super.onOptionsItemSelected(item);

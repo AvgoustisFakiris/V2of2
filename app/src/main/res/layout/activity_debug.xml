@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gr.hua.www.v2of2.DebugActivity">
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="187dp"
+        android:layout_height="61dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="61dp"
+        android:fontFamily="serif-monospace"
+        android:text="Debugger"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:text="Debugger" />
+
+    <TextView
+        android:id="@+id/tvSecond"
+        android:layout_width="fill_parent"
+        android:layout_height="265dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="8dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="147dp"
+        android:layout_below="@+id/title" />
+
+
+</RelativeLayout>

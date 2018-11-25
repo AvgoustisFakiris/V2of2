@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -28,9 +27,6 @@ import okhttp3.Response;
 public class LoginActivity extends BaseActivity {
 
     private final String TAG = getClass().getName(); // logging purposes
-    private TextView tv;
-
-
     /**
      * Any code to access activity fields must be handled in this method.
      */
@@ -38,7 +34,6 @@ public class LoginActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        tv = (TextView) findViewById(R.id.tvFragSecond);
         // Initiate the request to the protected service
         final Button submitButton = (Button) findViewById(R.id.submit);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +70,6 @@ public class LoginActivity extends BaseActivity {
         super.onPause();
     }
 
-
     /**
      * Our Broadcast Receiver. We get notified that the data is ready this way.
      */
@@ -90,7 +84,6 @@ public class LoginActivity extends BaseActivity {
             }
             //String response = intent.getStringExtra(RestTask.HTTP_RESPONSE);
             TOKEN = intent.getStringExtra(RestTask.TOKEN);
-            tv.setText(TOKEN);
             Log.d(TAG, "RESPONSE = " + TOKEN);
             try {
                 listAllCampaigns();
@@ -133,7 +126,12 @@ public class LoginActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tv.setText(myResponse);
+                        if (dbg) {
+                            //Parse the Response to see the result in a Splash Screen
+                            Intent i = new Intent(LoginActivity.this, DebugActivity.class);
+                            i.putExtra("resp", myResponse);
+                            startActivity(i);
+                        }
                     }
                 });
             }
