@@ -36,5 +36,11 @@
         android:orderInCategory="10"
         android:title="Map View"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_privacy"
+        android:orderInCategory="950"
+        android:icon="@drawable/priv"
+        android:title="Privacy Policy"
+        app:showAsAction="never"/>
 
 </menu>
