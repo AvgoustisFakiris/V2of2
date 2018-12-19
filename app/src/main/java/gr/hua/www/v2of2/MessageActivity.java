@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -42,6 +43,9 @@ public class MessageActivity extends Activity {
                 break;
             case "internet":
                 internetErrorMessage();
+                break;
+            case "accuracy":
+                HighAccuracyLocationErrorMessage();
                 break;
             default:
                 Toast.makeText(getApplicationContext(), "Unknown Alert Message!", Toast.LENGTH_LONG).show();
@@ -149,6 +153,43 @@ public class MessageActivity extends Activity {
                                 startActivity(i);
                                 MessageActivity.this.finish();
 
+                            }
+
+
+                        }).setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                        MessageActivity.this.finish();
+
+                    }
+
+                }).create();
+        ad.setCancelable(true);
+        ad.setOnDismissListener(new OnDismissListener() {
+
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                dialog.dismiss();
+                MessageActivity.this.finish();
+            }
+
+        });
+        ad.show();
+    }
+
+    private void HighAccuracyLocationErrorMessage() {
+
+        AlertDialog ad = new AlertDialog.Builder(this)
+                .setTitle("High Location Accuracy")
+                .setMessage("Please select High Accuracy Gps mode")
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                MessageActivity.this.finish();
                             }
 
 

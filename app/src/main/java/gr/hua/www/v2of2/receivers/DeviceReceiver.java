@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import gr.hua.www.v2of2.BaseActivity;
@@ -90,6 +92,38 @@ public class DeviceReceiver extends BroadcastReceiver {
             Intent i = new Intent(mContext, MessageActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.putExtra("Alert", "location");
+            mContext.startActivity(i);
+        }
+
+        //High Location Accuracy Check
+        int locationMode=0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            //Equal or higher than API 19/KitKat
+            try {
+                locationMode = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE);
+                //If Location mode is in High Accuracy
+                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY && BaseActivity.gpsEnabled){
+                    BaseActivity.locationModeEnable = true;
+                    Log.i(TAG, "gpsEnabled=" + String.valueOf(BaseActivity.locationModeEnable));
+                }
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+        }else{
+            //Lower than API 19
+            locationProviders = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            //If Location mode is in High Accuracy
+            if (locationProviders.contains(LocationManager.GPS_PROVIDER) && BaseActivity.gpsEnabled){
+                BaseActivity.locationModeEnable = true;
+                Log.i(TAG, "gpsEnabled=" + String.valueOf(BaseActivity.locationModeEnable));
+            }
+        }
+        if (!BaseActivity.locationModeEnable && BaseActivity.gpsEnabled){
+            Intent i = new Intent(mContext, MessageActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("Alert", "accuracy");
             mContext.startActivity(i);
         }
 

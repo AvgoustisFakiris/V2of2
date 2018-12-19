@@ -95,6 +95,7 @@ public class BaseActivity extends AppCompatActivity implements
     public static boolean gpsEnabled;
     public static boolean networkEnabled;
     public static boolean wifiEnabled;
+    public static boolean locationModeEnable;
     public static boolean mobileEnabled;
     public static boolean permissionsGranted;
     public static boolean ncrRegistered = false;
