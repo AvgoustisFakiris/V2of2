@@ -15,6 +15,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -148,6 +149,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected String uri;
 
     public static boolean dbg=false; //debugging choice
+    public static boolean snd=true; //Sound choice
 
     public static void setSNR(int snr) {
         BaseActivity.snr = snr;
@@ -467,6 +469,9 @@ public class BaseActivity extends AppCompatActivity implements
         //Debug Buttons Show
         MenuItem menuItemDebugOn = menu.findItem(R.id.menu_debug);
         MenuItem menuItemDebugOff = menu.findItem(R.id.menu_debug_off);
+        //Sound Buttons Show
+        MenuItem menuItemSoundOn = menu.findItem(R.id.menu_volume);
+        MenuItem menuItemSoundOff = menu.findItem(R.id.menu_mute);
 
         //Show Icons in Overflow Menu
         if (menu != null) {
@@ -489,7 +494,13 @@ public class BaseActivity extends AppCompatActivity implements
             menuItemDebugOn.setEnabled(true).setVisible(true);
             menuItemDebugOff.setEnabled(false).setVisible(false);
         }
-
+        if (snd) {
+            menuItemSoundOn.setEnabled(false).setVisible(false);
+            menuItemSoundOff.setEnabled(true).setVisible(true);
+        } else {
+            menuItemSoundOn.setEnabled(true).setVisible(true);
+            menuItemSoundOff.setEnabled(false).setVisible(false);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -524,6 +535,14 @@ public class BaseActivity extends AppCompatActivity implements
             case R.id.menu_privacy:
                 VersionHelper.refreshActionBarMenu(this);
                 showPrivacyDialog();
+                return true;
+            case R.id.menu_volume:
+                VersionHelper.refreshActionBarMenu(this);
+                snd=true;
+                return true;
+            case R.id.menu_mute:
+                VersionHelper.refreshActionBarMenu(this);
+                snd=false;
                 return true;
 
         }
@@ -660,15 +679,25 @@ public class BaseActivity extends AppCompatActivity implements
      * Check if appropriate permissions have been granted.
      */
     public void btnStart(View view) {
+        //Click Sound
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
         v = view;
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
         getMeasurements();
+        if(snd) {
+            mp.start();
+        }
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 
     public void btnLogin(View view) {
+        //Click Sound
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
+        if(snd) {
+            mp.start();
+        }
         v = view;
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
