@@ -149,7 +149,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected String uri;
 
     public static boolean dbg=false; //debugging choice
-    public static boolean snd=true; //Sound choice
+    public static boolean snd=false; //Sound choice
 
     public static void setSNR(int snr) {
         BaseActivity.snr = snr;
@@ -439,6 +439,15 @@ public class BaseActivity extends AppCompatActivity implements
                     }
                 }
             };
+
+            // Show the Logo icon in action bar.
+            setContentView(R.layout.activity_base);
+
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+
         }
         if (!ncrRegistered) {
             try {
@@ -539,6 +548,9 @@ public class BaseActivity extends AppCompatActivity implements
             case R.id.menu_volume:
                 VersionHelper.refreshActionBarMenu(this);
                 snd=true;
+                //Click Sound
+                final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
+                    mp.start();
                 return true;
             case R.id.menu_mute:
                 VersionHelper.refreshActionBarMenu(this);
