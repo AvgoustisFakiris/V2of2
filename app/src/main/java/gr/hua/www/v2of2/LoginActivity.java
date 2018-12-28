@@ -40,11 +40,11 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
 //                EditText editText = (EditText) getActivity().findViewById(R.id.username);
 //                user = editText.getText().toString();
-                user = "test";
+                user = "test@hua.gr";
 //                editText = (EditText) getActivity().findViewById(R.id.password);
 //                pass = editText.getText().toString();
                 pass = "1234";
-                uri = URL + "/login/?username=" + user + "&password=" + pass;
+                uri = URL + "/myapp/api-token-auth/";
                 Log.i(TAG, uri);
                 getToken();
             }
@@ -99,8 +99,8 @@ public class LoginActivity extends BaseActivity {
         }.getClass().getEnclosingMethod().getName());
         // the request
         OkHttpClient client = new OkHttpClient();
-
-        uri = URL + "/api/campaign/";
+        //Is not working with the new DataBase yet
+        uri = URL + "/api/myapp/V2OfCampaigns";
         Request request = new Request.Builder()
                 .url(uri)
                 .get()

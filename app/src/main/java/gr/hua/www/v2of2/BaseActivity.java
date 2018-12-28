@@ -28,6 +28,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.protocol.HTTP; // or this import cz.msebera.android.httpclient.protocol.HTTP; ????
 
 import java.lang.reflect.Method;
 import java.net.NetworkInterface;
@@ -126,7 +128,7 @@ public class BaseActivity extends AppCompatActivity implements
     public static String operatorName;
     public static String mcc;
     public static String mnc;
-    protected static String URL = "https://test.hua.gr:8443/HuaTester";
+    protected static String URL = "http://test.hua.gr/v2of";
     protected static String TOKEN;
     protected static TelephonyManager mTelephonyManager;
     static String REQUESTING_LOCATION_UPDATES_KEY;
@@ -1157,12 +1159,17 @@ public class BaseActivity extends AppCompatActivity implements
 
     protected void getToken() {
         // Next lines are only for testing purposes
-        user = "test";
+        user = "test@hua.gr";
         pass = "1234";
+        uri = URL + "/myapp/api-token-auth/";
         // the request
         try {
-            uri = URL + "/login/?username=" + user + "&password=" + pass;
+            String base64EncodedCredentials = "Basic " + Base64.encodeToString(
+                    (user + ":" + pass).getBytes(),
+                    Base64.NO_WRAP);
             HttpPost httpPost = new HttpPost(new URI(uri));
+            httpPost.setHeader("Authorization", base64EncodedCredentials);
+            httpPost.setHeader(HTTP.CONTENT_TYPE,"application/json");
             RestTask task = new RestTask(this, ACTION_FOR_INTENT_CALLBACK);
             task.execute(httpPost);
             progress = ProgressDialog.show(this, "Authenticating ...", "Getting Token ...", true);
