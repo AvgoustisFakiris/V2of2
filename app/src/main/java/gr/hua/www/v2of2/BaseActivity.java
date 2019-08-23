@@ -28,7 +28,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -53,8 +52,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.protocol.HTTP; // or this import cz.msebera.android.httpclient.protocol.HTTP; ????
+import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HTTP;
 
 import java.lang.reflect.Method;
 import java.net.NetworkInterface;
@@ -150,8 +152,9 @@ public class BaseActivity extends AppCompatActivity implements
     protected String pass;
     protected String uri;
 
-    public static boolean dbg=false; //debugging choice
-    public static boolean snd=false; //Sound choice
+    public static String jsonT;
+    public static boolean dbg = false; //debugging choice
+    public static boolean snd = false; //Sound choice
 
     public static void setSNR(int snr) {
         BaseActivity.snr = snr;
@@ -297,6 +300,7 @@ public class BaseActivity extends AppCompatActivity implements
     public void setMNC(String mnc) {
         BaseActivity.mnc = mnc;
     }
+
     //Privacy Policy Message
     private String myvar = "Effective date: October 12, 2018\n" +
             "\n" +
@@ -549,14 +553,14 @@ public class BaseActivity extends AppCompatActivity implements
                 return true;
             case R.id.menu_volume:
                 VersionHelper.refreshActionBarMenu(this);
-                snd=true;
+                snd = true;
                 //Click Sound
                 final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
-                    mp.start();
+                mp.start();
                 return true;
             case R.id.menu_mute:
                 VersionHelper.refreshActionBarMenu(this);
-                snd=false;
+                snd = false;
                 return true;
 
         }
@@ -699,7 +703,7 @@ public class BaseActivity extends AppCompatActivity implements
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
         getMeasurements();
-        if(snd) {
+        if (snd) {
             mp.start();
         }
         Intent intent = new Intent(this, MapsActivity.class);
@@ -709,7 +713,7 @@ public class BaseActivity extends AppCompatActivity implements
     public void btnLogin(View view) {
         //Click Sound
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
-        if(snd) {
+        if (snd) {
             mp.start();
         }
         v = view;
@@ -793,7 +797,7 @@ public class BaseActivity extends AppCompatActivity implements
                             && perms.get(android.Manifest.permission.ACCESS_NOTIFICATION_POLICY) == PackageManager.PERMISSION_GRANTED
                             && perms.get(android.Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED
                             && perms.get(android.Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED
-                            ) {
+                    ) {
                         // All Permissions Granted
                         Toast.makeText(BaseActivity.this, "Thank you!", Toast.LENGTH_SHORT)
                                 .show();
@@ -1069,10 +1073,20 @@ public class BaseActivity extends AppCompatActivity implements
 
         mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-    /*
-    * getDeviceId() returns the unique device ID.
-    * For example,the IMEI for GSM and the MEID or ESN for CDMA phones.
-    */
+        /*
+         * getDeviceId() returns the unique device ID.
+         * For example,the IMEI for GSM and the MEID or ESN for CDMA phones.
+         */
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         deviceID = mTelephonyManager.getDeviceId();
         if (deviceID  == null) {
             deviceID = "0000000000000000";
@@ -1159,16 +1173,16 @@ public class BaseActivity extends AppCompatActivity implements
 
     protected void getToken() {
         // Next lines are only for testing purposes
-        user = "test@hua.gr";
+        user = "test";
         pass = "1234";
         uri = URL + "/myapp/api-token-auth/";
         // the request
         try {
-            String base64EncodedCredentials = "Basic " + Base64.encodeToString(
-                    (user + ":" + pass).getBytes(),
-                    Base64.NO_WRAP);
+
             HttpPost httpPost = new HttpPost(new URI(uri));
-            httpPost.setHeader("Authorization", base64EncodedCredentials);
+            jsonT = "{\r\n    \"username\": \"test@hua.gr\",\r\n    \"password\": \"1234\"\r\n}";
+            HttpEntity entity = new StringEntity(jsonT,"utf-8");
+            httpPost.setEntity(entity);
             httpPost.setHeader(HTTP.CONTENT_TYPE,"application/json");
             RestTask task = new RestTask(this, ACTION_FOR_INTENT_CALLBACK);
             task.execute(httpPost);
@@ -1179,7 +1193,6 @@ public class BaseActivity extends AppCompatActivity implements
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
     }
-
     //Show Privacy Policy Message
     private void showPrivacyDialog() {
         new android.app.AlertDialog.Builder(this)

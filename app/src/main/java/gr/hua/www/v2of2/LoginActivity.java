@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity {
         // the request
         OkHttpClient client = new OkHttpClient();
         //Is not working with the new DataBase yet
-        uri = URL + "/api/myapp/V2OfCampaigns";
+        uri = URL + "/api/myapp/v2ofcampaigns";
         Request request = new Request.Builder()
                 .url(uri)
                 .get()
