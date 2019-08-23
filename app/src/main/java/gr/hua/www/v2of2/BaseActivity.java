@@ -26,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -86,7 +87,7 @@ import okhttp3.MediaType;
 public class BaseActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        LocationListener {
+        LocationListener, View.OnClickListener {
 
     protected static final long INTERVAL = 1000 * 60 * 1; // 1 minute
     protected static final long FASTEST_INTERVAL = 1000 * 1 * 5; // 5 seconds
@@ -135,6 +136,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected static TelephonyManager mTelephonyManager;
     static String REQUESTING_LOCATION_UPDATES_KEY;
     private static View v;
+    private CardView driveCard, settingsCard, chartsCard, privacyCard, loginCard; //dashboard purposes
     private final String TAG = getClass().getName(); // logging purposes
     /* Client used to interact with Google APIs. */
     protected int GooglePlayAvailability;
@@ -470,6 +472,21 @@ public class BaseActivity extends AppCompatActivity implements
         }
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
+
+        //Define DashBoard Cards
+        driveCard = (CardView) findViewById(R.id.drivecardId);
+        settingsCard = (CardView) findViewById(R.id.settingscardId);
+        chartsCard = (CardView) findViewById(R.id.chartscardId);
+        loginCard = (CardView) findViewById(R.id.logincardId);
+        privacyCard = (CardView) findViewById(R.id.privacycardId);
+
+        //Add clickListener to the cards
+        driveCard.setOnClickListener(this);
+        settingsCard.setOnClickListener(this);
+        loginCard.setOnClickListener(this);
+        chartsCard.setOnClickListener(this);
+        privacyCard.setOnClickListener(this);
+
     }
 
     @Override
@@ -693,35 +710,6 @@ public class BaseActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * Check if appropriate permissions have been granted.
-     */
-    public void btnStart(View view) {
-        //Click Sound
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
-        v = view;
-        Log.d(TAG, new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        getMeasurements();
-        if (snd) {
-            mp.start();
-        }
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
-
-    public void btnLogin(View view) {
-        //Click Sound
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
-        if (snd) {
-            mp.start();
-        }
-        v = view;
-        Log.d(TAG, new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
 
     /**
      * Handles the result of the request for application settings panel.
@@ -1088,24 +1076,24 @@ public class BaseActivity extends AppCompatActivity implements
             return;
         }
         deviceID = mTelephonyManager.getDeviceId();
-        if (deviceID  == null) {
+        if (deviceID == null) {
             deviceID = "0000000000000000";
         }
-    /*
-    * getSubscriberId() returns the unique subscriber ID,
-    * For example, the IMSI for a GSM phone.
-    */
+        /*
+         * getSubscriberId() returns the unique subscriber ID,
+         * For example, the IMSI for a GSM phone.
+         */
         subscriberID = mTelephonyManager.getSubscriberId();
         if (subscriberID == null) {
             subscriberID = "0000000000000000";
         }
-    /*
-    * getMacAddress() returns the MAC,
-    */
+        /*
+         * getMacAddress() returns the MAC,
+         */
         macID = getMacAddress();
-    /*
-    * Returns the unique android ID.
-    */
+        /*
+         * Returns the unique android ID.
+         */
         androidID = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         if (androidID.equals(null)) {
@@ -1181,9 +1169,9 @@ public class BaseActivity extends AppCompatActivity implements
 
             HttpPost httpPost = new HttpPost(new URI(uri));
             jsonT = "{\r\n    \"username\": \"test@hua.gr\",\r\n    \"password\": \"1234\"\r\n}";
-            HttpEntity entity = new StringEntity(jsonT,"utf-8");
+            HttpEntity entity = new StringEntity(jsonT, "utf-8");
             httpPost.setEntity(entity);
-            httpPost.setHeader(HTTP.CONTENT_TYPE,"application/json");
+            httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json");
             RestTask task = new RestTask(this, ACTION_FOR_INTENT_CALLBACK);
             task.execute(httpPost);
             progress = ProgressDialog.show(this, "Authenticating ...", "Getting Token ...", true);
@@ -1193,6 +1181,7 @@ public class BaseActivity extends AppCompatActivity implements
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
     }
+
     //Show Privacy Policy Message
     private void showPrivacyDialog() {
         new android.app.AlertDialog.Builder(this)
@@ -1210,5 +1199,63 @@ public class BaseActivity extends AppCompatActivity implements
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.apply();
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        Intent i;
+
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.soho);
+
+        switch (view.getId()) {
+            /**
+             * Check if appropriate permissions have been granted.
+             */
+            case R.id.drivecardId:
+                //Click Sound
+                if (snd) {
+                    mp.start();
+                }
+                getMeasurements();
+                i = new Intent(this, MapsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.logincardId:
+                //Click Sound
+                if (snd) {
+                    mp.start();
+                }
+                i = new Intent(this, LoginActivity.class);
+                startActivity(i);
+                break;
+            case R.id.chartscardId:
+                //Click Sound
+                if (snd) {
+                    mp.start();
+                }
+                i = new Intent(this, ChartsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.settingscardId:
+                //Click Sound
+                if (snd) {
+                    mp.start();
+                }
+                btnSettings(view);
+                break;
+            case R.id.privacycardId:
+                //Click Sound
+                if (snd) {
+                    mp.start();
+                }
+                showPrivacyDialog();
+                break;
+            default:
+                break;
+        }
+        Log.d(TAG, new Object() {
+        }.getClass().getEnclosingMethod().getName());
+
     }
 }
