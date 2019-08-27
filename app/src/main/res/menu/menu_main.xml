@@ -32,7 +32,7 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/menu_map_view"
-        android:icon="@drawable/map"
+        android:icon="@drawable/map4"
         android:orderInCategory="10"
         android:title="Map View"
         app:showAsAction="never" />

@@ -35,7 +35,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChartsActivity"></activity>
+        <activity android:name=".charts.StatisticsActivity"></activity>
+        <activity android:name=".charts.NetworksActivity" />
+        <activity android:name=".charts.VendorsActivity" />
+        <activity android:name=".charts.OSActivity" />
+        <activity android:name=".ChartsActivity" />
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"

@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/backg2"
     tools:context=".ChartsActivity">
 
-</android.support.constraint.ConstraintLayout>
+<com.nightonke.boommenu.BoomMenuButton
+    android:id="@+id/boom"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentBottom="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:bmb_buttonEnum="textOutsideCircle"
+    app:bmb_piecePlaceEnum="piecePlace_dot_4_1"
+    app:bmb_buttonPlaceEnum="buttonPlace_sc_4_1">
+</com.nightonke.boommenu.BoomMenuButton>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="monospace"
+        android:text="Statistics"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="372dp"
+        android:layout_height="263dp"
+        android:layout_below="@id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:fontFamily="monospace"
+        android:text="A picture is worth a million rows
+Data visualization makes insights come alive with impact and communicates complex ideas simply.
+Expressive visualization enables you to get beyond static charts to create multi-faceted views of data and explore every dimension. Click pink button for more"
+        android:textSize="12sp" />
+
+
+</RelativeLayout>
