@@ -35,6 +35,7 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.ads.consent.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,8 +61,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HTTP;
 
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.URI;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -136,6 +139,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected static TelephonyManager mTelephonyManager;
     static String REQUESTING_LOCATION_UPDATES_KEY;
     private static View v;
+//    private ConsentForm form; //Gdpr purposes
     private CardView driveCard, settingsCard, chartsCard, privacyCard, loginCard; //dashboard purposes
     private final String TAG = getClass().getName(); // logging purposes
     /* Client used to interact with Google APIs. */
@@ -154,9 +158,12 @@ public class BaseActivity extends AppCompatActivity implements
     protected String pass;
     protected String uri;
 
+
     public static String jsonT;
     public static boolean dbg = false; //debugging choice
     public static boolean snd = false; //Sound choice
+
+
 
     public static void setSNR(int snr) {
         BaseActivity.snr = snr;
@@ -472,6 +479,65 @@ public class BaseActivity extends AppCompatActivity implements
         }
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
+
+/*
+        //GDPR Code Implementation
+        ConsentInformation consentInformation = ConsentInformation.getInstance(this);
+        // TODO: Replace with your publisher ID.
+        String[] publisherIds = {"your publisher ID"};
+        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+            @Override
+            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                // User's consent status successfully updated.
+            }
+
+            @Override
+            public void onFailedToUpdateConsentInfo(String errorDescription) {
+                // User's consent status failed to update.
+            }
+        });
+
+        URL privacyUrl = null;
+        try {
+            // TODO: Replace with your app's privacy policy URL.
+            privacyUrl = new URL("https://www.your.com/privacyurl");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            // Handle error.
+        }
+         form = new ConsentForm.Builder(this, privacyUrl)
+                .withListener(new ConsentFormListener() {
+                    @Override
+                    public void onConsentFormLoaded() {
+                        // Consent form loaded successfully.
+                        form.show();
+
+                    }
+
+                    @Override
+                    public void onConsentFormOpened() {
+                        // Consent form was displayed.
+                    }
+
+                    @Override
+                    public void onConsentFormClosed(
+                            ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                        // Consent form was closed.
+                    }
+
+                    @Override
+                    public void onConsentFormError(String errorDescription) {
+                        // Consent form error.
+                    }
+                })
+                .withPersonalizedAdsOption()
+                .withNonPersonalizedAdsOption()
+                .withAdFreeOption()
+                .build();
+
+        form.load();
+    //End of GDPR Code
+*/
 
         //Define DashBoard Cards
         driveCard = (CardView) findViewById(R.id.drivecardId);
