@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".charts.StatisticsActivity">
+    tools:context=".charts.ProvidersActivity">
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barchart"
+    <com.github.mikephil.charting.charts.PieChart
         android:layout_width="match_parent"
-        android:layout_height="400sp"></com.github.mikephil.charting.charts.BarChart>
+        android:layout_height="match_parent"
+        android:id="@+id/piechart"></com.github.mikephil.charting.charts.PieChart>
+
+
 </RelativeLayout>

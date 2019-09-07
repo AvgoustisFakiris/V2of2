@@ -14,8 +14,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:bmb_buttonEnum="textOutsideCircle"
-    app:bmb_piecePlaceEnum="piecePlace_dot_4_1"
-    app:bmb_buttonPlaceEnum="buttonPlace_sc_4_1">
+    app:bmb_piecePlaceEnum="piecePlace_dot_5_1"
+    app:bmb_buttonPlaceEnum="buttonPlace_sc_5_1">
 </com.nightonke.boommenu.BoomMenuButton>
 
     <TextView

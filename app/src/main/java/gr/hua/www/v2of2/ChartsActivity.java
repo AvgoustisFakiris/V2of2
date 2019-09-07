@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import gr.hua.www.v2of2.charts.NetworksActivity;
 import gr.hua.www.v2of2.charts.OSActivity;
+import gr.hua.www.v2of2.charts.ProvidersActivity;
 import gr.hua.www.v2of2.charts.StatisticsActivity;
 import gr.hua.www.v2of2.charts.VendorsActivity;
 
@@ -53,11 +54,13 @@ public class ChartsActivity extends BaseActivity {
         imageIDList.add(R.drawable.os);
         imageIDList.add(R.drawable.vendors);
         imageIDList.add(R.drawable.signal);
+        imageIDList.add(R.drawable.providers);
 
         titleList.add("Measurements");
         titleList.add("Operating Systems");
         titleList.add("Vendors");
         titleList.add("Networks");
+        titleList.add("Providers");
     }
 
     private void goToPage(int i) {
@@ -71,8 +74,11 @@ public class ChartsActivity extends BaseActivity {
         } else if (i == 2) {
             intent = new Intent(this, VendorsActivity.class);
             startActivity(intent);
-        } else {
+        } else if(i==3){
             intent = new Intent(this, NetworksActivity.class);
+            startActivity(intent);
+        }else{
+            intent = new Intent(this, ProvidersActivity.class);
             startActivity(intent);
         }
 

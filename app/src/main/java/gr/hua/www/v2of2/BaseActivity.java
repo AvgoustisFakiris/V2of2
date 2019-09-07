@@ -35,6 +35,8 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieEntry;
 import com.google.ads.consent.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -55,16 +57,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 
-import org.apache.http.HttpEntity;
+
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HTTP;
 
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
+
 import java.net.NetworkInterface;
 import java.net.URI;
-import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,7 +133,8 @@ public class BaseActivity extends AppCompatActivity implements
     public static String operatorName;
     public static String mcc;
     public static String mnc;
-    protected static String URL = "http://test.hua.gr/v2of";
+
+    protected static String URL = "https://test.hua.gr:8443/HuaTester";
     protected static String TOKEN;
     protected static TelephonyManager mTelephonyManager;
     static String REQUESTING_LOCATION_UPDATES_KEY;
@@ -158,8 +158,16 @@ public class BaseActivity extends AppCompatActivity implements
     protected String pass;
     protected String uri;
 
+//Getting data from database to parse it to charts reasons
+    public static ArrayList<PieEntry> vendors =new ArrayList<>();
+    public static ArrayList<PieEntry> networks =new ArrayList<>();
+    public static ArrayList<PieEntry> opersyst =new ArrayList<>();
+    public static ArrayList<PieEntry> providers =new ArrayList<>();
+    public static ArrayList<BarEntry> minstat =new ArrayList<>();
+    public static ArrayList<BarEntry> maxstat =new ArrayList<>();
+    public static ArrayList<BarEntry> avgstat =new ArrayList<>();
+ //   public static String[] prov;
 
-    public static String jsonT;
     public static boolean dbg = false; //debugging choice
     public static boolean snd = false; //Sound choice
 
@@ -1229,15 +1237,10 @@ public class BaseActivity extends AppCompatActivity implements
         // Next lines are only for testing purposes
         user = "test";
         pass = "1234";
-        uri = URL + "/myapp/api-token-auth/";
         // the request
         try {
-
+            uri = URL + "/login/?username=" + user + "&password=" + pass;
             HttpPost httpPost = new HttpPost(new URI(uri));
-            jsonT = "{\r\n    \"username\": \"test@hua.gr\",\r\n    \"password\": \"1234\"\r\n}";
-            HttpEntity entity = new StringEntity(jsonT, "utf-8");
-            httpPost.setEntity(entity);
-            httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json");
             RestTask task = new RestTask(this, ACTION_FOR_INTENT_CALLBACK);
             task.execute(httpPost);
             progress = ProgressDialog.show(this, "Authenticating ...", "Getting Token ...", true);

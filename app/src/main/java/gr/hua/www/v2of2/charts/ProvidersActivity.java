@@ -1,7 +1,11 @@
 package gr.hua.www.v2of2.charts;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import gr.hua.www.v2of2.R;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,25 +14,20 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.util.ArrayList;
 
 import gr.hua.www.v2of2.BaseActivity;
-import gr.hua.www.v2of2.R;
 
-public class NetworksActivity extends BaseActivity {
-
+public class ProvidersActivity extends BaseActivity {
     PieChart pieChart;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_networks);
+        setContentView(R.layout.activity_providers);
         //Check if user has logged in
-        if(networks.isEmpty()){
+        if (providers.isEmpty()) {
             Toast.makeText(this, "Please Login First", Toast.LENGTH_LONG).show();
         }
 
@@ -36,7 +35,7 @@ public class NetworksActivity extends BaseActivity {
         //Customize Chart
         pieChart.setUsePercentValues(true);
         //    pieChart.getDescription().setEnabled(false);
-        pieChart.setExtraOffsets(5,10,5,5);
+        pieChart.setExtraOffsets(5, 10, 5, 5);
 
         pieChart.setDragDecelerationFrictionCoef(0.95f);
 
@@ -44,14 +43,15 @@ public class NetworksActivity extends BaseActivity {
         pieChart.setHoleColor(Color.WHITE);
         pieChart.setTransparentCircleRadius(61f);
 
+        //Customize Chart Description
         Description description = new Description();
-        description.setText("Networks");
+        description.setText("Providers");
         description.setTextSize(20);
         pieChart.setDescription(description);
 
         pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
 
-        PieDataSet dataSet = new PieDataSet(networks, "Newtork Type");
+        PieDataSet dataSet = new PieDataSet(providers, "Provider");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);

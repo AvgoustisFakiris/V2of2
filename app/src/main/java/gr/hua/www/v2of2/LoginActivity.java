@@ -10,6 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieEntry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import gr.hua.www.v2of2.utils.RestTask;
@@ -27,6 +35,7 @@ import okhttp3.Response;
 public class LoginActivity extends BaseActivity {
 
     private final String TAG = getClass().getName(); // logging purposes
+
     /**
      * Any code to access activity fields must be handled in this method.
      */
@@ -40,11 +49,11 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
 //                EditText editText = (EditText) getActivity().findViewById(R.id.username);
 //                user = editText.getText().toString();
-                user = "test@hua.gr";
+                user = "test";
 //                editText = (EditText) getActivity().findViewById(R.id.password);
 //                pass = editText.getText().toString();
                 pass = "1234";
-                uri = URL + "/myapp/api-token-auth/";
+                uri = URL + "/login/?username=" + user + "&password=" + pass;
                 Log.i(TAG, uri);
                 getToken();
             }
@@ -86,7 +95,13 @@ public class LoginActivity extends BaseActivity {
             TOKEN = intent.getStringExtra(RestTask.TOKEN);
             Log.d(TAG, "RESPONSE = " + TOKEN);
             try {
+                //Call classes for taking database data
                 listAllCampaigns();
+                vendorsOperator();
+                networksOperator();
+                osOperator();
+                providersOperator();
+                statisticsOperator();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -99,8 +114,8 @@ public class LoginActivity extends BaseActivity {
         }.getClass().getEnclosingMethod().getName());
         // the request
         OkHttpClient client = new OkHttpClient();
-        //Is not working with the new DataBase yet
-        uri = URL + "/api/myapp/v2ofcampaigns";
+
+        uri = URL + "/api/campaign/";
         Request request = new Request.Builder()
                 .url(uri)
                 .get()
@@ -135,6 +150,260 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
             }
+        });
+    }
+
+    //Getting data for VendorsActivity class
+    public void vendorsOperator() throws IOException {
+        Log.d(TAG, new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        // the request
+        OkHttpClient client = new OkHttpClient();
+        //url to get json data
+        uri = URL + "/api/measurement/vendors/";
+        Request request = new Request.Builder()
+                .url(uri)
+                .get()
+                .addHeader("token", TOKEN)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        //   progress = ProgressDialog.show(this, "Please wait ...", "data are loading ...", true);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+            //Get Data and fill arrays
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (progress != null) {
+                    progress.dismiss();
+                }
+                final String myResponse = response.body().string();
+                Log.i(TAG, myResponse);
+
+                try {
+                    JSONArray jsonArray = new JSONArray(myResponse);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String key = object.getString("key");
+                        int value = object.getInt("value");
+                        vendors.add(new PieEntry(value, key));
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            }
+
+        });
+    }
+
+    //Getting data for NetworksActivity class
+    public void networksOperator() throws IOException {
+        Log.d(TAG, new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        // the request
+        OkHttpClient client = new OkHttpClient();
+        // url to get json data
+        uri = URL + "/api/measurement/networkTypes/";
+        Request request = new Request.Builder()
+                .url(uri)
+                .get()
+                .addHeader("token", TOKEN)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        //   progress = ProgressDialog.show(this, "Please wait ...", "data are loading ...", true);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (progress != null) {
+                    progress.dismiss();
+                }
+                final String myResponse = response.body().string();
+                Log.i(TAG, myResponse);
+                //Get Data and fill arrays
+                try {
+                    JSONArray jsonArray = new JSONArray(myResponse);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String key = object.getString("key");
+                        int value = object.getInt("value");
+                        networks.add(new PieEntry(value, key));
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            }
+
+        });
+    }
+
+    //Getting data for NetworksActivity class
+    public void osOperator() throws IOException {
+        Log.d(TAG, new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        // the request
+        OkHttpClient client = new OkHttpClient();
+        //url to get json data
+        uri = URL + "/api/measurement/operatingSystems/";
+        Request request = new Request.Builder()
+                .url(uri)
+                .get()
+                .addHeader("token", TOKEN)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        //   progress = ProgressDialog.show(this, "Please wait ...", "data are loading ...", true);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (progress != null) {
+                    progress.dismiss();
+                }
+                final String myResponse = response.body().string();
+                Log.i(TAG, myResponse);
+                //Get Data and fill arrays
+                try {
+                    JSONArray jsonArray = new JSONArray(myResponse);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String key = object.getString("key");
+                        int value = object.getInt("value");
+                        opersyst.add(new PieEntry(value, key));
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            }
+
+        });
+    }
+
+    //Getting data for NetworksActivity class
+    public void providersOperator() throws IOException {
+        Log.d(TAG, new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        // the request
+        OkHttpClient client = new OkHttpClient();
+        //url to get json data
+        uri = URL + "/api/measurement/allproviders";
+        Request request = new Request.Builder()
+                .url(uri)
+                .get()
+                .addHeader("token", TOKEN)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        //   progress = ProgressDialog.show(this, "Please wait ...", "data are loading ...", true);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (progress != null) {
+                    progress.dismiss();
+                }
+                final String myResponse = response.body().string();
+                Log.i(TAG, myResponse);
+                //Get Data and fill arrays
+                try {
+                    JSONArray jsonArray = new JSONArray(myResponse);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String key = object.getString("operatorname");
+                        int value = object.getInt("value");
+                        providers.add(new PieEntry(value, key));
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            }
+
+        });
+    }
+
+    //Getting data for NetworksActivity class
+    public void statisticsOperator() throws IOException {
+        Log.d(TAG, new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        // the request
+        OkHttpClient client = new OkHttpClient();
+        //url to get json data
+        uri = URL + "/api/measurement/levelStats/";
+        Request request = new Request.Builder()
+                .url(uri)
+                .get()
+                .addHeader("token", TOKEN)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        //   progress = ProgressDialog.show(this, "Please wait ...", "data are loading ...", true);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (progress != null) {
+                    progress.dismiss();
+                }
+                final String myResponse = response.body().string();
+                Log.i(TAG, myResponse);
+                //Get Data and fill arrays
+                try {
+                    JSONArray jsonArray = new JSONArray(myResponse);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String operator = object.getString("operatorname");
+                        int max = object.getInt("max");
+                        int min = object.getInt("min");
+                        long avg = object.getLong("avg");
+                        minstat.add(new BarEntry(i, min));
+                        maxstat.add(new BarEntry(i, max));
+                        avgstat.add(new BarEntry(i, avg));
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            }
+
         });
     }
 

@@ -1,23 +1,21 @@
 package gr.hua.www.v2of2.charts;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.util.ArrayList;
 
+import gr.hua.www.v2of2.BaseActivity;
 import gr.hua.www.v2of2.R;
 
-public class VendorsActivity extends AppCompatActivity {
-
+public class VendorsActivity extends BaseActivity {
 
     PieChart pieChart;
 
@@ -25,6 +23,10 @@ public class VendorsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendors);
+        //Check if user has logged in
+        if(vendors.isEmpty()){
+            Toast.makeText(this, "Please Login First", Toast.LENGTH_LONG).show();
+        }
 
         pieChart = (PieChart) findViewById(R.id.piechart);
         //Customize Chart
@@ -38,13 +40,7 @@ public class VendorsActivity extends AppCompatActivity {
         pieChart.setHoleColor(Color.WHITE);
         pieChart.setTransparentCircleRadius(61f);
 
-        ArrayList<PieEntry> yValues = new ArrayList<>();
-        //Add values to Chart
-        yValues.add(new PieEntry(34f, "Lg"));
-        yValues.add(new PieEntry(34f, "Sony"));
-        yValues.add(new PieEntry(34f, "Samsung"));
-        yValues.add(new PieEntry(34f, "Other"));
-
+        //Customize Chart Description
         Description description = new Description();
         description.setText("Vendors");
         description.setTextSize(20);
@@ -52,10 +48,10 @@ public class VendorsActivity extends AppCompatActivity {
 
         pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
 
-        PieDataSet dataSet = new PieDataSet(yValues, "Devices");
+        PieDataSet dataSet = new PieDataSet(vendors, "Devices");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
-        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
         PieData data = new PieData((dataSet));
         data.setValueTextSize(10f);
