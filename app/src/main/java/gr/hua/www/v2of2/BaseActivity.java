@@ -57,7 +57,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 
-
 import org.apache.http.client.methods.HttpPost;
 
 import java.lang.reflect.Method;
@@ -139,7 +138,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected static TelephonyManager mTelephonyManager;
     static String REQUESTING_LOCATION_UPDATES_KEY;
     private static View v;
-//    private ConsentForm form; //Gdpr purposes
+    //    private ConsentForm form; //Gdpr purposes
     private CardView driveCard, settingsCard, chartsCard, privacyCard, loginCard; //dashboard purposes
     private final String TAG = getClass().getName(); // logging purposes
     /* Client used to interact with Google APIs. */
@@ -158,19 +157,18 @@ public class BaseActivity extends AppCompatActivity implements
     protected String pass;
     protected String uri;
 
-//Getting data from database to parse it to charts reasons
-    public static ArrayList<PieEntry> vendors =new ArrayList<>();
-    public static ArrayList<PieEntry> networks =new ArrayList<>();
-    public static ArrayList<PieEntry> opersyst =new ArrayList<>();
-    public static ArrayList<PieEntry> providers =new ArrayList<>();
-    public static ArrayList<BarEntry> minstat =new ArrayList<>();
-    public static ArrayList<BarEntry> maxstat =new ArrayList<>();
-    public static ArrayList<BarEntry> avgstat =new ArrayList<>();
- //   public static String[] prov;
+    //Getting data from database to parse it to charts reasons
+    public static ArrayList<PieEntry> vendors = new ArrayList<>();
+    public static ArrayList<PieEntry> networks = new ArrayList<>();
+    public static ArrayList<PieEntry> opersyst = new ArrayList<>();
+    public static ArrayList<PieEntry> providers = new ArrayList<>();
+    public static ArrayList<BarEntry> minstat = new ArrayList<>();
+    public static ArrayList<BarEntry> maxstat = new ArrayList<>();
+    public static ArrayList<BarEntry> avgstat = new ArrayList<>();
+    //   public static String[] prov;
 
     public static boolean dbg = false; //debugging choice
     public static boolean snd = false; //Sound choice
-
 
 
     public static void setSNR(int snr) {
@@ -471,6 +469,9 @@ public class BaseActivity extends AppCompatActivity implements
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
+            // Logout Google Account purposes
+            // mAuth = FirebaseAuth.getInstance();
+
         }
         if (!ncrRegistered) {
             try {
@@ -653,6 +654,12 @@ public class BaseActivity extends AppCompatActivity implements
                 VersionHelper.refreshActionBarMenu(this);
                 snd = false;
                 return true;
+            /* Logout Google Account
+            case R.id.menu_logout:
+                VersionHelper.refreshActionBarMenu(this);
+                mGoogleApiClient.clearDefaultAccountAndReconnect();
+                mAuth.signOut();
+                return true; */
 
         }
         return super.onOptionsItemSelected(item);

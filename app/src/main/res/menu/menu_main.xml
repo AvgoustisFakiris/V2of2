@@ -5,31 +5,31 @@
 
     <item
         android:id="@+id/menu_settings"
+        android:icon="@drawable/settings"
         android:orderInCategory="1000"
         android:title="Settings"
-        android:icon="@drawable/settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_exit"
-        android:orderInCategory="1100"
         android:icon="@drawable/exit"
+        android:orderInCategory="1100"
         android:title="Exit"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_debug"
-        android:orderInCategory="850"
         android:icon="@drawable/debug"
+        android:orderInCategory="850"
         android:title="Enable Debugging"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_debug_off"
-        android:orderInCategory="850"
         android:icon="@drawable/nodebug"
+        android:orderInCategory="850"
         android:title="Disable Debugging"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_map_view"
         android:icon="@drawable/map4"
@@ -38,10 +38,10 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_privacy"
-        android:orderInCategory="950"
         android:icon="@drawable/priv"
+        android:orderInCategory="950"
         android:title="Privacy Policy"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_volume"
         android:icon="@drawable/volume"
@@ -50,9 +50,17 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_mute"
-        android:orderInCategory="950"
         android:icon="@drawable/mute"
+        android:orderInCategory="950"
         android:title="Mute"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
+    <!--
+  GoogleA-Account Logout
+      <item
+  android:id="@+id/menu_logout"
+  android:orderInCategory="950"
+  android:title="Logout"
+  app:showAsAction="never"/>
+-->
 
 </menu>
