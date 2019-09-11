@@ -1,52 +1,90 @@
 {
   "project_info": {
-    "project_number": "164378453971",
-    "firebase_url": "https://v2of-77736.firebaseio.com",
-    "project_id": "v2of-77736",
-    "storage_bucket": "v2of-77736.appspot.com"
+    "project_number": "628119256911",
+    "firebase_url": "https://diplomaproject-af.firebaseio.com",
+    "project_id": "diplomaproject-af",
+    "storage_bucket": "diplomaproject-af.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:164378453971:android:996f229911125044",
+        "mobilesdk_app_id": "1:628119256911:android:f0b1e3699ba4df15",
+        "android_client_info": {
+          "package_name": "co.intellisence.www.v2of"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628119256911-nvk6n1ud3ujvq52ol25m14b1d7ppp4b1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.intellisence.www.v2of",
+            "certificate_hash": "1a40419184f668dac9098855b1fc0305dc2f41e8"
+          }
+        },
+        {
+          "client_id": "628119256911-7e1l8d8heonfo7qfftbvrjicrvgu3m2u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4MTAyvYqvSPWdlvSw6nVTWLT_NuwiBfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628119256911-7e1l8d8heonfo7qfftbvrjicrvgu3m2u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628119256911:android:996f229911125044",
         "android_client_info": {
           "package_name": "gr.hua.www.v2of2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "164378453971-q3fvqt8g8duvohc265nj2rm6k8rmcbbn.apps.googleusercontent.com",
+          "client_id": "628119256911-mtdbqrula3tmm91ig9hd7566veglqbr4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "gr.hua.www.v2of2",
-            "certificate_hash": "53abec5a258c73271465365c01316215da1f630c"
+            "certificate_hash": "48c66e434a9ca25b8111c5b05af9c4dc1284be84"
           }
         },
         {
-          "client_id": "164378453971-5pq5r89mkts8ju3r7rrl6v28pqmjv72v.apps.googleusercontent.com",
+          "client_id": "628119256911-6vr4tb0alb1lkaq2blvlt6416qlaqfr7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gr.hua.www.v2of2",
+            "certificate_hash": "1a40419184f668dac9098855b1fc0305dc2f41e8"
+          }
+        },
+        {
+          "client_id": "628119256911-7e1l8d8heonfo7qfftbvrjicrvgu3m2u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDX61sT-0eJULzOw-CybdJFT_YbClPd4H8"
+          "current_key": "AIzaSyD4MTAyvYqvSPWdlvSw6nVTWLT_NuwiBfU"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "164378453971-5pq5r89mkts8ju3r7rrl6v28pqmjv72v.apps.googleusercontent.com",
+              "client_id": "628119256911-7e1l8d8heonfo7qfftbvrjicrvgu3m2u.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

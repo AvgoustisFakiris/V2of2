@@ -54,12 +54,12 @@ public class LoginActivity extends BaseActivity {
 
     private final String TAG = getClass().getName(); // logging purposes
 
-    /* **Google SignIn button**
+    //Google SignIn button**
     private SignInButton mGoogleBtn;
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener; */
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     /**
      * Any code to access activity fields must be handled in this method.
@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-/* *** Google-SignIn purposes ***
+//Google-SignIn purposes ***
         mGoogleBtn = (SignInButton) findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
 
@@ -96,7 +96,7 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
                 signIn();
             }
-        }); */
+        });
 
         // Initiate the request to the protected service
         final Button submitButton = (Button) findViewById(R.id.submit);
@@ -117,7 +117,7 @@ public class LoginActivity extends BaseActivity {
         }.getClass().getEnclosingMethod().getName());
     }
 
-    /* *** Google-SignIn purposes ***
+    //Google-SignIn purposes ***
     private void signIn(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -134,6 +134,7 @@ public class LoginActivity extends BaseActivity {
                 // Google Sign In was succesful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                Toast.makeText(LoginActivity.this, "Successful Login", Toast.LENGTH_SHORT).show();
             }else{
                 // Google Sign In failed, update UI appropriately
                 Toast.makeText(LoginActivity.this, "Sign-In Failed", Toast.LENGTH_SHORT).show();
@@ -165,7 +166,7 @@ public class LoginActivity extends BaseActivity {
                         // ...
                     }
                 });
-    } */
+    }
 
 
     @Override

@@ -55,6 +55,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import org.apache.http.client.methods.HttpPost;
@@ -169,6 +170,9 @@ public class BaseActivity extends AppCompatActivity implements
 
     public static boolean dbg = false; //debugging choice
     public static boolean snd = false; //Sound choice
+
+    FirebaseAuth mAuth;
+    FirebaseAuth.AuthStateListener mAuthListener;
 
 
     public static void setSNR(int snr) {
@@ -470,7 +474,7 @@ public class BaseActivity extends AppCompatActivity implements
             getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
             // Logout Google Account purposes
-            // mAuth = FirebaseAuth.getInstance();
+            mAuth = FirebaseAuth.getInstance();
 
         }
         if (!ncrRegistered) {
@@ -654,12 +658,12 @@ public class BaseActivity extends AppCompatActivity implements
                 VersionHelper.refreshActionBarMenu(this);
                 snd = false;
                 return true;
-            /* Logout Google Account
             case R.id.menu_logout:
                 VersionHelper.refreshActionBarMenu(this);
                 mGoogleApiClient.clearDefaultAccountAndReconnect();
                 mAuth.signOut();
-                return true; */
+                Toast.makeText(this, "You have been successfully logged out!", Toast.LENGTH_SHORT).show();
+                return true;
 
         }
         return super.onOptionsItemSelected(item);

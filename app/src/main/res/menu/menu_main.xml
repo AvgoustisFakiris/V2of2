@@ -54,13 +54,12 @@
         android:orderInCategory="950"
         android:title="Mute"
         app:showAsAction="never" />
-    <!--
-  GoogleA-Account Logout
-      <item
-  android:id="@+id/menu_logout"
-  android:orderInCategory="950"
-  android:title="Logout"
-  app:showAsAction="never"/>
--->
+    <item
+        android:id="@+id/menu_logout"
+        android:orderInCategory="950"
+        android:icon="@drawable/logout"
+        android:title="Logout"
+        app:showAsAction="never" />
+
 
 </menu>

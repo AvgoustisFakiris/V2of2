@@ -73,13 +73,11 @@
             android:layout_below="@+id/username"
             android:text="@string/submit" />
 
-        <!--
-      Google Sign-In Button
       <com.google.android.gms.common.SignInButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/googleBtn"></com.google.android.gms.common.SignInButton>
-  -->
+
 
     </LinearLayout>
 </ScrollView>
