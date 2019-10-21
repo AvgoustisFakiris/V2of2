@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="preferExternal"
     package="gr.hua.www.v2of2">
     <!-- Use permission for Google Maps (ref: https://developers.google.com/maps/documentation/android/start#getting_the_google_maps_android_api_v2) -->
     <permission
@@ -74,6 +75,7 @@
         </receiver
         -->
         <service android:name=".utils.StickyService" />
+        <service android:name=".LocationService" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

@@ -117,7 +117,7 @@ public class MapsActivity extends BaseActivity implements
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
         try {
-            if (FLAG_KEEP_SCREEN_ON==1) {//If flag is on
+            if (FLAG_KEEP_SCREEN_ON == 1) {//If flag is on
                 getWindow().clearFlags(FLAG_KEEP_SCREEN_ON);
             }
         } catch (Exception e) {
@@ -195,7 +195,7 @@ public class MapsActivity extends BaseActivity implements
         if (mCurrentLocation != null && mLastLocation != null) {
             // Adding point to database
             if (TOKEN != null) {
-                writeTuple();
+                //  writeTuple();
             }
             // float bearing = mLastLocation.bearingTo(mCurrentLocation);
             float bearing = mCurrentLocation.getBearing();
@@ -218,9 +218,7 @@ public class MapsActivity extends BaseActivity implements
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(point, 19));
             }
             updateCameraBearing(map, point, bearing);
-        }
-        else
-        {
+        } else {
             Log.d(TAG, "There is no current location!");
         }
     }

@@ -5,6 +5,7 @@ package gr.hua.www.v2of2;
  */
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -583,6 +584,9 @@ public class BaseActivity extends AppCompatActivity implements
         //Sound Buttons Show
         MenuItem menuItemSoundOn = menu.findItem(R.id.menu_volume);
         MenuItem menuItemSoundOff = menu.findItem(R.id.menu_mute);
+        //Service Buttons Show
+        MenuItem menuServiceOn = menu.findItem(R.id.menu_startservice);
+        MenuItem menuServiceOff = menu.findItem(R.id.menu_stopservice);
 
         //Show Icons in Overflow Menu
         if (menu != null) {
@@ -612,6 +616,13 @@ public class BaseActivity extends AppCompatActivity implements
             menuItemSoundOn.setEnabled(true).setVisible(true);
             menuItemSoundOff.setEnabled(false).setVisible(false);
         }
+        if (isLocationServiceRunning()) {
+            menuServiceOn.setEnabled(false).setVisible(false);
+            menuServiceOff.setEnabled(true).setVisible(true);
+        } else {
+            menuServiceOn.setEnabled(true).setVisible(true);
+            menuServiceOff.setEnabled(false).setVisible(false);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -622,6 +633,8 @@ public class BaseActivity extends AppCompatActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        //Initialize Service
+        Intent backService = new Intent(this, LocationService.class);
 
         switch (id) {
             case R.id.menu_settings:
@@ -664,6 +677,18 @@ public class BaseActivity extends AppCompatActivity implements
                 mAuth.signOut();
                 Toast.makeText(this, "You have been successfully logged out!", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.menu_stopservice:
+                VersionHelper.refreshActionBarMenu(this);
+                stopService(backService);
+                return true;
+            case R.id.menu_startservice:
+                VersionHelper.refreshActionBarMenu(this);
+                if (TOKEN != null) {
+                    getMeasurements();
+                    getInfo();
+                    startService(backService);
+                    return true;
+                }
 
         }
         return super.onOptionsItemSelected(item);
@@ -922,8 +947,8 @@ public class BaseActivity extends AppCompatActivity implements
         try {
             if (mGoogleApiClient != null) {
                 if (mRequestingLocationUpdates)
-                    stopLocationUpdates();
-                mGoogleApiClient.disconnect();
+                    //    stopLocationUpdates();
+                    mGoogleApiClient.disconnect();
                 gacConnected = false;
             }
         } catch (Exception e) {
@@ -1279,6 +1304,19 @@ public class BaseActivity extends AppCompatActivity implements
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.apply();
+    }
+
+    //Check if LocationService is Running
+    private boolean isLocationServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ("gr.hua.www.v2of2.LocationService".equals(service.service.getClassName())) {
+                Log.d(TAG, "isLocationServiceRunning: location service is already running.");
+                return true;
+            }
+        }
+        Log.d(TAG, "isLocationServiceRunning: location service is not running.");
+        return false;
     }
 
 

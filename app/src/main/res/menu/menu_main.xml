@@ -55,10 +55,22 @@
         android:title="Mute"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_logout"
-        android:orderInCategory="950"
-        android:icon="@drawable/logout"
-        android:title="Logout"
+    android:id="@+id/menu_logout"
+    android:orderInCategory="950"
+    android:icon="@drawable/logout"
+    android:title="Logout"
+    app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_startservice"
+        android:orderInCategory="1000"
+        android:icon="@drawable/serv"
+        android:title="Start Service"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_stopservice"
+        android:orderInCategory="1000"
+        android:icon="@drawable/serv"
+        android:title="Stop Service"
         app:showAsAction="never" />
 
 
