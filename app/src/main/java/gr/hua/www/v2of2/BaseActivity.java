@@ -18,6 +18,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -59,12 +61,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-import org.apache.http.client.methods.HttpPost;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.net.NetworkInterface;
-import java.net.URI;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,7 +83,13 @@ import gr.hua.www.v2of2.utils.Installation;
 import gr.hua.www.v2of2.utils.RestTask;
 import gr.hua.www.v2of2.utils.StickyService;
 import gr.hua.www.v2of2.utils.VersionHelper;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -134,9 +144,14 @@ public class BaseActivity extends AppCompatActivity implements
     public static String operatorName;
     public static String mcc;
     public static String mnc;
+    public static String manufactorer;
+    public static int aversion;
+    public static String ssid;
+    public static String androidOS;
 
-    protected static String URL = "https://test.hua.gr:8443/HuaTester";
-    protected static String TOKEN;
+
+    protected static String URL = "http://test.hua.gr/v2of/";
+    protected static String TOKEN, REFRESHTOKEN;
     protected static TelephonyManager mTelephonyManager;
     static String REQUESTING_LOCATION_UPDATES_KEY;
     private static View v;
@@ -152,24 +167,27 @@ public class BaseActivity extends AppCompatActivity implements
     protected PendingResult<LocationSettingsResult> result;
     protected static Location mCurrentLocation;
     protected static Location mLastLocation;
-    protected LatLng point;
+    protected static LatLng point;
     protected String mLastUpdateTime;
     protected ProgressDialog progress;
-    protected String user;
-    protected String pass;
+    protected static String user;
+    protected static String pass;
     protected String uri;
 
-    //Getting data from database to parse it to charts reasons
+    //For getting data from database to parse it to charts
     public static ArrayList<PieEntry> vendors = new ArrayList<>();
     public static ArrayList<PieEntry> networks = new ArrayList<>();
     public static ArrayList<PieEntry> opersyst = new ArrayList<>();
     public static ArrayList<PieEntry> providers = new ArrayList<>();
+    //For Statistcs Operator
     public static ArrayList<BarEntry> minstat = new ArrayList<>();
     public static ArrayList<BarEntry> maxstat = new ArrayList<>();
     public static ArrayList<BarEntry> avgstat = new ArrayList<>();
-    //   public static String[] prov;
+    public static ArrayList<String> prov = new ArrayList<>();
 
-    public static boolean dbg = false; //debugging choice
+    public String measu = "levelStats/";
+    public String netw = "";
+
     public static boolean snd = false; //Sound choice
 
     FirebaseAuth mAuth;
@@ -458,7 +476,7 @@ public class BaseActivity extends AppCompatActivity implements
                         if (location != null) {
                             Log.d(TAG, "onLocationResult inside");
                             Log.d(TAG, "Lat: " + location.getLatitude() + " Lng : " + location.getLongitude());
-                            point = new LatLng(location.getLatitude(), location.getLongitude());
+                            //    point = new LatLng(location.getLatitude(), location.getLongitude());
                             mCurrentLocation = location;
                             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
                         }
@@ -493,6 +511,20 @@ public class BaseActivity extends AppCompatActivity implements
         }
         Log.d(TAG, new Object() {
         }.getClass().getEnclosingMethod().getName());
+
+        //Define DashBoard Cards
+        driveCard = (CardView) findViewById(R.id.drivecardId);
+        settingsCard = (CardView) findViewById(R.id.settingscardId);
+        chartsCard = (CardView) findViewById(R.id.chartscardId);
+        loginCard = (CardView) findViewById(R.id.logincardId);
+        privacyCard = (CardView) findViewById(R.id.privacycardId);
+
+        //Add clickListener to the cards
+        driveCard.setOnClickListener(this);
+        settingsCard.setOnClickListener(this);
+        loginCard.setOnClickListener(this);
+        chartsCard.setOnClickListener(this);
+        privacyCard.setOnClickListener(this);
 
 /*
         //GDPR Code Implementation
@@ -553,20 +585,6 @@ public class BaseActivity extends AppCompatActivity implements
     //End of GDPR Code
 */
 
-        //Define DashBoard Cards
-        driveCard = (CardView) findViewById(R.id.drivecardId);
-        settingsCard = (CardView) findViewById(R.id.settingscardId);
-        chartsCard = (CardView) findViewById(R.id.chartscardId);
-        loginCard = (CardView) findViewById(R.id.logincardId);
-        privacyCard = (CardView) findViewById(R.id.privacycardId);
-
-        //Add clickListener to the cards
-        driveCard.setOnClickListener(this);
-        settingsCard.setOnClickListener(this);
-        loginCard.setOnClickListener(this);
-        chartsCard.setOnClickListener(this);
-        privacyCard.setOnClickListener(this);
-
     }
 
     @Override
@@ -578,9 +596,6 @@ public class BaseActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //Debug Buttons Show
-        MenuItem menuItemDebugOn = menu.findItem(R.id.menu_debug);
-        MenuItem menuItemDebugOff = menu.findItem(R.id.menu_debug_off);
         //Sound Buttons Show
         MenuItem menuItemSoundOn = menu.findItem(R.id.menu_volume);
         MenuItem menuItemSoundOff = menu.findItem(R.id.menu_mute);
@@ -602,13 +617,6 @@ public class BaseActivity extends AppCompatActivity implements
             }
         }
         //Showing only one button at a time
-        if (dbg) {
-            menuItemDebugOn.setEnabled(false).setVisible(false);
-            menuItemDebugOff.setEnabled(true).setVisible(true);
-        } else {
-            menuItemDebugOn.setEnabled(true).setVisible(true);
-            menuItemDebugOff.setEnabled(false).setVisible(false);
-        }
         if (snd) {
             menuItemSoundOn.setEnabled(false).setVisible(false);
             menuItemSoundOff.setEnabled(true).setVisible(true);
@@ -643,14 +651,6 @@ public class BaseActivity extends AppCompatActivity implements
             case R.id.menu_exit:
                 finish();
                 System.exit(0);
-            case R.id.menu_debug:
-                VersionHelper.refreshActionBarMenu(this);
-                dbg = true;
-                return true;
-            case R.id.menu_debug_off:
-                VersionHelper.refreshActionBarMenu(this);
-                dbg = false;
-                return true;
             case R.id.menu_map_view:
                 VersionHelper.refreshActionBarMenu(this);
                 Intent intent = new Intent(getApplicationContext(), MapView.class);
@@ -675,6 +675,11 @@ public class BaseActivity extends AppCompatActivity implements
                 VersionHelper.refreshActionBarMenu(this);
                 mGoogleApiClient.clearDefaultAccountAndReconnect();
                 mAuth.signOut();
+                user = null;
+                pass = null;
+                TOKEN = null;
+                LoginActivity la = new LoginActivity();
+                la.stopTimer();
                 Toast.makeText(this, "You have been successfully logged out!", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_stopservice:
@@ -684,9 +689,15 @@ public class BaseActivity extends AppCompatActivity implements
             case R.id.menu_startservice:
                 VersionHelper.refreshActionBarMenu(this);
                 if (TOKEN != null) {
+                    //Get Phone Measurements
                     getMeasurements();
                     getInfo();
-                    startService(backService);
+                    //Start service:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(backService);
+                    } else {
+                        startService(backService);
+                    }
                     return true;
                 }
 
@@ -1007,7 +1018,7 @@ public class BaseActivity extends AppCompatActivity implements
         }.getClass().getEnclosingMethod().getName());
         if (location != null) {
             Log.d(TAG, "Lat: " + location.getLatitude() + " Lng : " + location.getLongitude());
-            point = new LatLng(location.getLatitude(), location.getLongitude());
+            // point = new LatLng(location.getLatitude(), location.getLongitude());
             mCurrentLocation = location;
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         }
@@ -1220,21 +1231,36 @@ public class BaseActivity extends AppCompatActivity implements
         model = Build.MODEL;
         brand = Build.BRAND;
         product = Build.PRODUCT;
+        manufactorer = Build.MANUFACTURER;
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             os = Build.VERSION.BASE_OS;
         }
+        //Restriction of Django API
+        if (os != "") {
+            os = os.substring(0, 30);
+        }
         osId = Build.VERSION.RELEASE;
+        aversion = Build.VERSION.SDK_INT;
+
+        Field[] fields = Build.VERSION_CODES.class.getFields();
+        androidOS = fields[Build.VERSION.SDK_INT + 1].getName();
 
         setMCC(mTelephonyManager.getNetworkOperator().substring(0, 3));
         setMNC(mTelephonyManager.getNetworkOperator().substring(3));
         setOperatorName(mTelephonyManager.getNetworkOperatorName());
+
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = wifiManager.getConnectionInfo();
+        ssid  = info.getSSID();
 
         Log.i(TAG, brand);
         Log.i(TAG, model);
         Log.i(TAG, product);
         Log.i(TAG, Build.ID);
         Log.i(TAG, operatorName);
+        Log.i(TAG, manufactorer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.i(TAG, Build.VERSION.BASE_OS);
         }
@@ -1245,6 +1271,7 @@ public class BaseActivity extends AppCompatActivity implements
         Log.i(TAG, "Device Serial : " + deviceSerial);
         Log.i(TAG, "Subscriber ID : " + subscriberID);
         Log.i(TAG, "Device MAC : " + macID);
+        Log.i(TAG, "Android Version : " + aversion);
 
     }
 
@@ -1269,23 +1296,6 @@ public class BaseActivity extends AppCompatActivity implements
 
     }
 
-    protected void getToken() {
-        // Next lines are only for testing purposes
-        user = "test";
-        pass = "1234";
-        // the request
-        try {
-            uri = URL + "/login/?username=" + user + "&password=" + pass;
-            HttpPost httpPost = new HttpPost(new URI(uri));
-            RestTask task = new RestTask(this, ACTION_FOR_INTENT_CALLBACK);
-            task.execute(httpPost);
-            progress = ProgressDialog.show(this, "Authenticating ...", "Getting Token ...", true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG, new Object() {
-        }.getClass().getEnclosingMethod().getName());
-    }
 
     //Show Privacy Policy Message
     private void showPrivacyDialog() {
@@ -1319,7 +1329,7 @@ public class BaseActivity extends AppCompatActivity implements
         return false;
     }
 
-
+    //Dashboard
     @Override
     public void onClick(View view) {
         Intent i;
@@ -1376,4 +1386,5 @@ public class BaseActivity extends AppCompatActivity implements
         }.getClass().getEnclosingMethod().getName());
 
     }
+
 }

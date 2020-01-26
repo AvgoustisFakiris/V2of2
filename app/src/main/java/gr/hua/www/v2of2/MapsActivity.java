@@ -66,13 +66,16 @@ public class MapsActivity extends BaseActivity implements
                     if (location != null) {
                         Log.d(TAG, "onLocationResult Maps");
                         Log.d(TAG, "Lat: " + location.getLatitude() + " Lng : " + location.getLongitude());
-                        point = new LatLng(location.getLatitude(), location.getLongitude());
-                        mLastLocation = mCurrentLocation;
-                        mCurrentLocation = location;
-                        mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-                        mSpeed = 3.6f * mCurrentLocation.getSpeed(); // -> Km/h
-                        getInfo();
-                        addPoint();
+                        //   point = new LatLng(location.getLatitude(), location.getLongitude());
+                        //   mLastLocation = mCurrentLocation;
+                        //   mCurrentLocation = location;
+                       // mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                       // mSpeed = 3.6f * mCurrentLocation.getSpeed(); // -> Km/h
+                        //  getInfo();
+                        if (point != null) {
+                            addPoint();
+                        }
+
                     }
                 }
             }
@@ -237,88 +240,6 @@ public class MapsActivity extends BaseActivity implements
                 .build();
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
-    }
-
-
-    private void writeTuple() {
-        Log.d(TAG, new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        jsonTuple = "{" +
-                "\"brand\":\"" + brand + "\"" +
-                ",\"deviceModel\":\"" + model + "\"" +
-                ",\"deviceName\":\"" + product + "\"" +
-//                    ",\"os\":\"" + os + "\"" +
-                ",\"osId\":\"" + osId + "\"" +
-                ",\"operatorname\":\"" + operatorName + "\"" +
-                ",\"networkType\":\"" + networkType + "\"" +
-                ",\"lat\":" + mCurrentLocation.getLatitude() +
-                ",\"lon\":" + mCurrentLocation.getLongitude() +
-                ",\"speed\":" + mSpeed +
-                ",\"accuracy\":" + mCurrentLocation.getAccuracy() +
-                ",\"altitude\":" + mCurrentLocation.getAltitude() +
-                ",\"timestamp\":" + mCurrentLocation.getTime() +
-                ",\"level\":" + level +
-                ",\"cellid\":" + cid +
-                ",\"lac\":" + lac +
-                ",\"psc\":" + psc +
-                ",\"qual\":" + qual +
-                ",\"cqi\":" + cqi +
-                ",\"mcc\":\"" + mcc + "\"" +
-                ",\"mnc\":\"" + mnc + "\"" +
-                ",\"snr\":" + snr +
-                "}";
-        try {
-            sendTuple(jsonTuple);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void sendTuple(final String json) throws IOException {
-        Log.d(TAG, new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        // the request
-        OkHttpClient client = new OkHttpClient();
-
-        uri = URL + "/api/measurement/";
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(uri)
-                .post(body)
-                .addHeader("content-type", "application/json")
-                .addHeader("token", TOKEN)
-                .addHeader("cache-control", "no-cache")
-                .build();
-
-//       progress = ProgressDialog.show(this, "Please wait ...", "saving data ...", true);
-//        Toast.makeText(getBaseContext(), "Transmit data!", Toast.LENGTH_LONG).show();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                call.cancel();
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-/*
-                if (progress != null) {
-                    progress.dismiss();
-                }
-*/
-                String myResponse = response.body().string();
-                Log.d(TAG, myResponse);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "sendTuple: " + json.toString());
-//                        Log.d(TAG, "TOKEN: " + TOKEN);
-                    }
-                });
-            }
-        });
     }
 
 

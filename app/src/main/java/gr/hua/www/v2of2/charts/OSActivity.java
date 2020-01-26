@@ -49,7 +49,7 @@ public class OSActivity extends BaseActivity {
         pieChart.setDescription(description);
 
 
-        pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
+        pieChart.animateY(1000, Easing.EaseInOutCubic);
 
         PieDataSet dataSet = new PieDataSet(opersyst, "Operating System");
         dataSet.setSliceSpace(3f);

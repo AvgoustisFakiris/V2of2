@@ -4,10 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/place_autocomplete_separator"
+    android:id="@+id/as"
     tools:context=".charts.StatisticsActivity">
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barchart"
         android:layout_width="match_parent"
         android:layout_height="400sp"></com.github.mikephil.charting.charts.BarChart>
+
+    <Spinner
+        android:id="@+id/sp1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/barchart"
+        android:layout_marginBottom="-434dp"></Spinner>
+
+    <Spinner
+        android:id="@+id/sp2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/barchart"
+        android:layout_alignStart="@+id/sp1"
+        android:layout_marginStart="214dp"
+        android:layout_marginBottom="-434dp"></Spinner>
+
+    <Button
+        android:id="@+id/sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sp2"
+        android:layout_marginBottom="-79dp"
+        android:background="@color/black_overlay"
+        android:onClick="btnSubmit"
+        android:text="Submit"
+        android:textColor="@color/lightgray" />
+
+
 </RelativeLayout>

@@ -8,4 +8,17 @@
 
     <string name="title_activity_message">MessageActivity</string>
 
+    <string-array name="measurement">
+        <item>Level</item>
+        <item>Uplink</item>
+        <item>Downlink</item>
+    </string-array>
+
+    <string-array name="network">
+        <item>All</item>
+        <item>2G</item>
+        <item>3G</item>
+        <item>4G</item>
+    </string-array>
+
 </resources>

@@ -49,7 +49,7 @@ public class ProvidersActivity extends BaseActivity {
         description.setTextSize(20);
         pieChart.setDescription(description);
 
-        pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
+        pieChart.animateY(1000, Easing.EaseInOutCubic);
 
         PieDataSet dataSet = new PieDataSet(providers, "Provider");
         dataSet.setSliceSpace(3f);

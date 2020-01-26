@@ -16,20 +16,6 @@
         android:orderInCategory="1100"
         android:title="Exit"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_debug"
-        android:icon="@drawable/debug"
-        android:orderInCategory="850"
-        android:title="Enable Debugging"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_debug_off"
-        android:icon="@drawable/nodebug"
-        android:orderInCategory="850"
-        android:title="Disable Debugging"
-        app:showAsAction="never" />
     <item
         android:id="@+id/menu_map_view"
         android:icon="@drawable/map4"
@@ -55,21 +41,21 @@
         android:title="Mute"
         app:showAsAction="never" />
     <item
-    android:id="@+id/menu_logout"
-    android:orderInCategory="950"
-    android:icon="@drawable/logout"
-    android:title="Logout"
-    app:showAsAction="never" />
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/logout"
+        android:orderInCategory="950"
+        android:title="Logout"
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_startservice"
-        android:orderInCategory="1000"
         android:icon="@drawable/serv"
+        android:orderInCategory="1000"
         android:title="Start Service"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_stopservice"
-        android:orderInCategory="1000"
         android:icon="@drawable/serv"
+        android:orderInCategory="1000"
         android:title="Stop Service"
         app:showAsAction="never" />
 
